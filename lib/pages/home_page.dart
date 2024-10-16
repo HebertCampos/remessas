@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:remessas/models/associados_model.dart';
+import 'package:remessas/pages/components/card_home_component.dart';
+import 'package:remessas/pages/components/footer_home_component.dart';
 import 'package:remessas/services/api_services.dart';
 
 class HomePage extends StatefulWidget {
@@ -21,13 +23,15 @@ class _HomePageState extends State<HomePage> {
     'NOVO ASSOCIADO',
     'DESCONTO DEBITO EM CONTA',
     'DESCONTO EM FOLHA',
-    'DESCONTO ASFAL-SAUDE'
+    'DESCONTO ASFAL-SAUDE',
+    'OUTROS'
   ];
   Map<String, bool> selectedTiposCobranca = {
     'NOVO ASSOCIADO': false,
     'DESCONTO DEBITO EM CONTA': false,
     'DESCONTO EM FOLHA': false,
     'DESCONTO ASFAL-SAUDE': false,
+    'OUTROS': false,
   };
 
   @override
@@ -98,92 +102,86 @@ class _HomePageState extends State<HomePage> {
         title: const Text('Sócios Contribuintes'),
         centerTitle: true,
       ),
-      body: Stack(
-        children: [
-          if (_isLoading)
-            const Center(
-              child: CircularProgressIndicator(),
-            )
-          else
-            Column(
-              children: [
-                TextField(
-                  controller: searchController,
-                  onChanged: (value) => filterSearch(value),
-                  decoration:
-                      const InputDecoration(labelText: 'Buscar associado'),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('Filtros:',
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.bold)),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: tiposCobranca.map((tipo) {
-                            return Row(
-                              children: [
-                                Transform.scale(
-                                  scale: 0.5,
-                                  child: Checkbox(
-                                    value: selectedTiposCobranca[tipo],
-                                    onChanged: (bool? value) {
-                                      setState(() {
-                                        selectedTiposCobranca[tipo] = value!;
-                                      });
-                                      filterTiposCobranca();
-                                    },
-                                  ),
-                                ),
-                                Text(
-                                  tipo,
-                                  style: const TextStyle(fontSize: 10),
-                                ),
-                              ],
-                            );
-                          }).toList(),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Stack(
+          children: [
+            if (_isLoading)
+              const Center(
+                child: CircularProgressIndicator(),
+              )
+            else
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: TextField(
+                      controller: searchController,
+                      onChanged: (value) => filterSearch(value),
+                      decoration: const InputDecoration(
+                        labelText: 'Buscar associado',
+                        prefixIcon: Icon(Icons.search),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(25),
+                          ),
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: filteredAssociados.length,
-                    itemBuilder: (context, index) {
-                      final associado = filteredAssociados[index];
-                      return CardListAssociadosComponent(associado: associado);
-                    },
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('Filtros:',
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.bold)),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: tiposCobranca.map((tipo) {
+                              return Row(
+                                children: [
+                                  Transform.scale(
+                                    scale: 0.5,
+                                    child: Checkbox(
+                                      value: selectedTiposCobranca[tipo],
+                                      onChanged: (bool? value) {
+                                        setState(() {
+                                          selectedTiposCobranca[tipo] = value!;
+                                        });
+                                        filterTiposCobranca();
+                                      },
+                                    ),
+                                  ),
+                                  Text(
+                                    tipo,
+                                    style: const TextStyle(fontSize: 10),
+                                  ),
+                                ],
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            )
-        ],
-      ),
-    );
-  }
-}
-
-class CardListAssociadosComponent extends StatelessWidget {
-  const CardListAssociadosComponent({
-    super.key,
-    required this.associado,
-  });
-
-  final AssociadosModel associado;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      child: ListTile(
-        leading: Text('Código\n${associado.codTitular}'),
-        title: Text(associado.nome),
-        subtitle: Text(associado.tipoCobranca),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: filteredAssociados.length,
+                      itemBuilder: (context, index) {
+                        final associado = filteredAssociados[index];
+                        return CardListAssociadosComponent(
+                            associado: associado);
+                      },
+                    ),
+                  ),
+                  const FooterComponet(page: 1)
+                ],
+              ),
+          ],
+        ),
       ),
     );
   }
