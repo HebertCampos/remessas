@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:remessas/pages/components/provisao_component.dart';
 
 class FooterComponet extends StatelessWidget {
   final int page; // Tornar 'page' um campo final para ser imutável
@@ -17,24 +18,26 @@ class FooterComponet extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         child: Row(
           children: [
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: ElevatedButton(
+            //     onPressed: page == 1 ? null : () {}, // Desativa se page == 1
+            //     child: const Text('Lista Sócios'),
+            //   ),
+            // ),
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: ElevatedButton(
+            //     onPressed: page == 2 ? null : () {}, // Desativa se page == 2
+            //     child: const Text('Data de Emissão'),
+            //   ),
+            // ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
-                onPressed: page == 1 ? null : () {}, // Desativa se page == 1
-                child: const Text('Lista Sócios'),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                onPressed: page == 2 ? null : () {}, // Desativa se page == 2
-                child: const Text('Data de Emissão'),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                onPressed: page == 3 ? null : () {}, // Desativa se page == 3
+                onPressed: () {
+                  showEditProvisaoDialog(context);
+                }, // Desativa se page == 3
                 child: const Text('Provisão'),
               ),
             ),

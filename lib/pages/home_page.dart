@@ -58,6 +58,7 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         _isLoading = false;
       });
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Erro ao carregar associados: $e')),
       );
