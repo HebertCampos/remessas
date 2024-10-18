@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:remessas/pages/components/provisao_component.dart';
+import 'package:remessas/pages/components/show_provisao_component.dart';
 
 class FooterComponet extends StatelessWidget {
   final int page; // Tornar 'page' um campo final para ser imutável

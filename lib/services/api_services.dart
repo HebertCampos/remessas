@@ -43,4 +43,19 @@ class ApiServices {
       throw 'Erro ao gerar provisão $e';
     }
   }
+
+  Future<void> alteraTipoCobranca(
+      String codTitular, String tipoCobranca, String flagCobranca) async {
+    final url = Uri.parse(
+        '$baseUrl/social/modificartipocobranca?cod_titular=$codTitular&novo_tipo=$tipoCobranca&flag_cobranca=$flagCobranca');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+      } else {
+        throw 'Falha ao modificar cobrança';
+      }
+    } catch (e) {
+      throw 'Erro ao gerar modificar $e';
+    }
+  }
 }

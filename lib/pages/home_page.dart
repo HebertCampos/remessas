@@ -96,6 +96,19 @@ class _HomePageState extends State<HomePage> {
         .text); // Atualiza o filtro quando um checkbox é marcado/desmarcado
   }
 
+  void loadAssociados() async {
+    setState(() {
+      _isLoading = true; // Para mostrar o carregamento
+    });
+    final associados = await apiServices.getAssociados();
+    setState(() {
+      this.associados = associados;
+      filteredAssociados = associados; // Atualiza também a lista filtrada
+      _isLoading = false; // Finaliza o carregamento
+    });
+    // print(pacientes);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -174,7 +187,10 @@ class _HomePageState extends State<HomePage> {
                       itemBuilder: (context, index) {
                         final associado = filteredAssociados[index];
                         return CardListAssociadosComponent(
-                            associado: associado);
+                          associado: associado,
+                          onRefresh:
+                              loadAssociados, // Passa a função loadAssociados como callback
+                        );
                       },
                     ),
                   ),
