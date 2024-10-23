@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:remessas/pages/components/show_provisao_component.dart';
+import 'package:remessas/pages/components/show_remessa_component.dart';
 
 class FooterComponet extends StatelessWidget {
   final int page; // Tornar 'page' um campo final para ser imutável
@@ -44,7 +45,11 @@ class FooterComponet extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
-                onPressed: page == 4 ? null : () {}, // Desativa se page == 4
+                onPressed: page == 4
+                    ? null
+                    : () {
+                        showEditRemessaComponent(context);
+                      }, // Desativa se page == 4
                 child: const Text('Remessa'),
               ),
             ),
