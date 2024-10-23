@@ -44,6 +44,28 @@ class ApiServices {
     }
   }
 
+  Future<void> gerarRemessa(String competencia, String tipoBanco,
+      String remessa, String dataCobranca) async {
+    final url = Uri.parse(
+        '$baseUrl/social/remessaparabanco?mes_ano_cobranca=$competencia&data_cobranca=$dataCobranca&banco=$tipoBanco&remessa=$remessa');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        // Cria um link de download
+        html.AnchorElement(
+            href:
+                '$baseUrl/social/remessaparabanco?mes_ano_cobranca=$competencia&data_cobranca=$dataCobranca&banco=$tipoBanco&remessa=$remessa')
+          ..setAttribute(
+              'download', 'arquivo_baixado.txt') // Define o nome do arquivo
+          ..click(); // Simula um clique no link para iniciar o download
+      } else {
+        throw 'Falha ao realizar provisão';
+      }
+    } catch (e) {
+      throw 'Erro ao gerar provisão $e';
+    }
+  }
+
   Future<void> alteraTipoCobranca(
       String codTitular, String tipoCobranca, String flagCobranca) async {
     final url = Uri.parse(

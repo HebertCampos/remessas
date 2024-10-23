@@ -64,11 +64,13 @@ Future<void> showEditTipoCobrancaDialog(
                       ),
                     );
                   }
+                  // ignore: use_build_context_synchronously
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text("Tipo modificado: $selectedTipoCobranca"),
                     ),
                   );
+                  // ignore: use_build_context_synchronously
                   Navigator.of(context)
                       .pop(true); // Fecha o diálogo após salvar
                 },

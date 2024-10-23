@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:remessas/services/api_services.dart';
 
 Future<void> showEditRemessaComponent(BuildContext context) async {
   TextEditingController dataProvisaoController = TextEditingController();
@@ -96,7 +97,14 @@ Future<void> showEditRemessaComponent(BuildContext context) async {
                     int mes = int.tryParse(partes[0]) ?? 0;
                     int ano = int.tryParse(partes[1]) ?? 0;
                     if (mes >= 1 && mes <= 12 && ano >= 2010 && ano <= 2050) {
+                      await ApiServices().gerarRemessa(
+                          dataProvisao,
+                          selectedTipoBanco,
+                          remessaController.text,
+                          dataCobrancaController.text);
+                      // ignore: use_build_context_synchronously
                       Navigator.of(context).pop();
+                      // ignore: use_build_context_synchronously
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
