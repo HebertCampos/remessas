@@ -80,4 +80,17 @@ class ApiServices {
       throw 'Erro ao gerar modificar $e';
     }
   }
+
+  Future<void> enviaArquivoBaixa(String texto) async {
+    final url = Uri.parse('$baseUrl/social/baixarecebimento?arquivo=$texto');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+      } else {
+        throw 'Falha ao modificar cobrança';
+      }
+    } catch (e) {
+      throw 'Erro ao gerar modificar $e';
+    }
+  }
 }
