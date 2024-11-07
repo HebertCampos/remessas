@@ -17,7 +17,15 @@ class CardListAssociadosComponent extends StatelessWidget {
     return Card(
       elevation: 5,
       child: ListTile(
-        leading: Text('Código\n${associado.codTitular}'),
+        leading: Column(
+          children: [
+            Text('Código\n${associado.codTitular}'),
+            Icon(
+              associado.autorizadoDebito == 'SIM' ? Icons.attach_money : null,
+              size: 12,
+            ),
+          ],
+        ),
         title: Text(associado.nome),
         subtitle: Text(associado.tipoCobranca),
         trailing: Text('Data inclusão:\n${associado.dataInclusao}'),

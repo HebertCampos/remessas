@@ -4,17 +4,18 @@ import 'package:remessas/services/api_services.dart';
 
 Future<void> showEditTipoCobrancaDialog(
     BuildContext context, AssociadosModel associados) async {
-  // Lista de opções para o dropdown
   List<String> tiposCobranca = [
     'NOVO ASSOCIADO',
     'DESCONTO DEBITO EM CONTA',
     'DESCONTO EM FOLHA',
     'DESCONTO ASFAL-SAUDE'
   ];
-  // Defina o valor inicial ou deixe nulo se não estiver na lista
+
   String? selectedTipoCobranca = tiposCobranca.contains(associados.tipoCobranca)
       ? associados.tipoCobranca
-      : tiposCobranca[0]; // Define o primeiro valor como padrão
+      : tiposCobranca[0];
+
+  bool autorizadoDebito = associados.autorizadoDebito == 'SIM';
 
   return showDialog(
     context: context,
@@ -28,7 +29,7 @@ Future<void> showEditTipoCobrancaDialog(
               children: [
                 Text(associados.nome),
                 DropdownButton<String>(
-                  value: selectedTipoCobranca, // Valor atual selecionado
+                  value: selectedTipoCobranca,
                   isExpanded: true,
                   items: tiposCobranca.map((String tipo) {
                     return DropdownMenuItem<String>(
@@ -42,20 +43,36 @@ Future<void> showEditTipoCobrancaDialog(
                     });
                   },
                 ),
+                CheckboxListTile(
+                  title: const Text('Autorizado Débito'),
+                  value: autorizadoDebito,
+                  onChanged: (bool? newValue) {
+                    setState(() {
+                      autorizadoDebito = newValue ?? false;
+                    });
+                  },
+                  controlAffinity: ListTileControlAffinity.leading,
+                ),
               ],
             ),
             actions: [
               TextButton(
                 onPressed: () async {
+                  autorizadoDebito ? 'S' : 'N';
+                  // Verifica o tipo de cobrança e altera na API
                   if (selectedTipoCobranca == 'DESCONTO DEBITO EM CONTA') {
                     await ApiServices()
                         .alteraTipoCobranca(associados.codTitular, '2', 'S');
                   } else if (selectedTipoCobranca == 'DESCONTO EM FOLHA') {
-                    await ApiServices()
-                        .alteraTipoCobranca(associados.codTitular, '3', 'N');
+                    await ApiServices().alteraTipoCobranca(
+                        associados.codTitular,
+                        '3',
+                        autorizadoDebito ? 'S' : 'N');
                   } else if (selectedTipoCobranca == 'DESCONTO ASFAL-SAUDE') {
-                    await ApiServices()
-                        .alteraTipoCobranca(associados.codTitular, '4', 'N');
+                    await ApiServices().alteraTipoCobranca(
+                        associados.codTitular,
+                        '4',
+                        autorizadoDebito ? 'S' : 'N');
                   } else if (selectedTipoCobranca == 'NOVO ASSOCIADO') {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -64,6 +81,7 @@ Future<void> showEditTipoCobrancaDialog(
                       ),
                     );
                   }
+                  // Notificação e fechamento do diálogo
                   // ignore: use_build_context_synchronously
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -77,11 +95,12 @@ Future<void> showEditTipoCobrancaDialog(
                 child: const Text('Salvar'),
               ),
               TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text(
-                    "Cancelar",
-                    style: TextStyle(color: Colors.red),
-                  )),
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text(
+                  "Cancelar",
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
             ],
           );
         },
