@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-// import 'package:remessas/pages/components/file.dart';
 import 'package:remessas/pages/components/show_file_baixa.dart';
 import 'package:remessas/pages/components/show_provisao_component.dart';
+import 'package:remessas/pages/components/show_recebimento_component.dart';
 import 'package:remessas/pages/components/show_remessa_component.dart';
 
 class FooterComponet extends StatelessWidget {
@@ -49,7 +49,18 @@ class FooterComponet extends StatelessWidget {
                     : () {
                         showFileBaixa(context);
                       },
-                child: const Text('Baixa recebimentos'),
+                child: const Text('Baixa arquivos'),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                onPressed: page == 4
+                    ? null
+                    : () {
+                        showEditgerarRecebimentoDialog(context);
+                      },
+                child: const Text('Recebimentos'),
               ),
             ),
           ],
