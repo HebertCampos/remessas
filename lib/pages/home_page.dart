@@ -24,14 +24,14 @@ class _HomePageState extends State<HomePage> {
     'DESCONTO DEBITO EM CONTA',
     'DESCONTO EM FOLHA',
     'DESCONTO ASFAL-SAUDE',
-    'OUTROS'
+    'OUTRO TIPO'
   ];
   Map<String, bool> selectedTiposCobranca = {
     'NOVO ASSOCIADO': false,
     'DESCONTO DEBITO EM CONTA': false,
     'DESCONTO EM FOLHA': false,
     'DESCONTO ASFAL-SAUDE': false,
-    'OUTROS': false,
+    'OUTRO TIPO': false,
   };
 
   @override
