@@ -63,6 +63,24 @@ class ApiServices {
     }
   }
 
+  Future<void> gerarPlanosAtivos() async {
+    final url = Uri.parse('$baseUrl/social/planosativos');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        // Cria um link de download
+        html.AnchorElement(href: '$baseUrl/social/planosativos')
+          ..setAttribute(
+              'download', 'arquivo_baixado.txt') // Define o nome do arquivo
+          ..click(); // Simula um clique no link para iniciar o download
+      } else {
+        throw 'Falha ao realizar recebimento';
+      }
+    } catch (e) {
+      throw 'Erro ao gerar recebimento $e';
+    }
+  }
+
   Future<void> gerarRemessa(String competencia, String tipoBanco,
       String remessa, String dataCobranca) async {
     final url = Uri.parse(
