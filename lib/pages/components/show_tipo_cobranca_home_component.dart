@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:remessas/models/associados_model.dart';
 import 'package:remessas/services/api_services.dart';
 
+import 'show_conta_bancaria_component.dart';
+
 Future<void> showEditTipoCobrancaDialog(
     BuildContext context, AssociadosModel associados) async {
   List<String> tiposCobranca = [
@@ -43,15 +45,44 @@ Future<void> showEditTipoCobrancaDialog(
                     });
                   },
                 ),
-                CheckboxListTile(
-                  title: const Text('Autorizado Débito'),
-                  value: autorizadoDebito,
-                  onChanged: (bool? newValue) {
-                    setState(() {
-                      autorizadoDebito = newValue ?? false;
-                    });
-                  },
-                  controlAffinity: ListTileControlAffinity.leading,
+                Row(
+                  children: [
+                    Expanded(
+                      child: CheckboxListTile(
+                        title: const Text('Autorizado Débito'),
+                        value: autorizadoDebito,
+                        onChanged: (bool? newValue) {
+                          setState(() {
+                            autorizadoDebito = newValue ?? false;
+                          });
+                        },
+                        controlAffinity: ListTileControlAffinity.leading,
+                      ),
+                    ),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          Navigator.of(context).pop();
+                          Future.delayed(Duration.zero, () async {
+                            await showEditContaBancariaDialog(
+                              // ignore: use_build_context_synchronously
+                              Navigator.of(context, rootNavigator: true)
+                                  .context,
+                              associados,
+                            );
+                            // Opcionalmente, reabra o diálogo original
+                            await showEditTipoCobrancaDialog(
+                              // ignore: use_build_context_synchronously
+                              Navigator.of(context, rootNavigator: true)
+                                  .context,
+                              associados,
+                            );
+                          });
+                        },
+                        child: const Text('Conta bancária'),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

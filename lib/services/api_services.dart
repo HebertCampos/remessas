@@ -118,6 +118,22 @@ class ApiServices {
     }
   }
 
+  Future<void> alterDadosBancarios(String codTitular, String banco,
+      String agencia, String operacao, String conta) async {
+    final url = Uri.parse(
+        '$baseUrl/social/modificacontabancaria/?codigo=$codTitular&banco=$banco&agencia=$agencia&operacao=$operacao&conta=$conta');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+      } else {
+        // print("erro da funcao: ${json.decode(response.body)}");
+        throw 'Falha ao modificar cobrança';
+      }
+    } catch (e) {
+      throw 'Erro ao gerar modificar $e';
+    }
+  }
+
   Future<void> enviaArquivoBaixa(String texto) async {
     final url = Uri.parse('$baseUrl/social/baixarecebimento?arquivo=$texto');
     try {
