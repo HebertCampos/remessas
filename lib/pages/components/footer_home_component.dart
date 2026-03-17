@@ -26,6 +26,15 @@ class FooterComponet extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
                 onPressed: () async {
+                  await ApiServices().baixaAssociados();
+                },
+                child: const Text('Lista associados'),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                onPressed: () async {
                   await ApiServices().gerarPlanosAtivos();
                 },
                 child: const Text('Planos ativos'),
