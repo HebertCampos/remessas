@@ -82,6 +82,17 @@ class FooterComponet extends StatelessWidget {
                 child: const Text('Recebimentos'),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                onPressed: page == 4
+                    ? null
+                    : () {
+                        showFileConsignado(context);
+                      },
+                child: const Text('Consignado'),
+              ),
+            ),
           ],
         ),
       ),

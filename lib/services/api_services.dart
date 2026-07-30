@@ -105,14 +105,14 @@ class ApiServices {
 
   Future<void> baixaAssociados() async {
     final url = Uri.parse(
-        '$baseUrl/social/baixarassociados');
+      '$baseUrl/social/baixarassociados');
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
         // Cria um link de download
         html.AnchorElement(
-            href:
-                '$baseUrl/social/baixarassociados')
+          href: 
+            '$baseUrl/social/baixarassociados')
           ..setAttribute(
               'download', 'arquivo_baixado.txt') // Define o nome do arquivo
           ..click(); // Simula um clique no link para iniciar o download
@@ -165,6 +165,49 @@ class ApiServices {
       }
     } catch (e) {
       throw 'Erro ao gerar modificar $e';
+    }
+  }
+
+  Future<void> enviaArquivoConsignado(
+      String texto, String competencia, String valor, String acao) async {
+    final url =
+        Uri.parse('$baseUrl/safeconsig/envioremessa/');
+
+    try {
+      final valorLimpo =
+          valor.replaceAll(RegExp(r'[^0-9,\.]'), '').replaceAll(',', '.');
+
+      final request = http.MultipartRequest('POST', url)
+        // ..fields['arquivo'] = texto
+        ..fields['competencia'] = competencia
+        ..fields['valor'] = valorLimpo
+        ..fields['acao'] = acao.toUpperCase()
+        ..files.add(http.MultipartFile.fromBytes(
+          'arquivo',
+          utf8.encode(texto),
+          filename: 'arquivo_${competencia.replaceAll('/', '')}.csv',
+        ));
+
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+
+      print('Status da API: ${response.statusCode}');
+      print('Resposta da API: ${response.body}');
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final fileName = 'safe_consig_${competencia.replaceAll('/', '')}.txt';
+        final blob = html.Blob([response.bodyBytes], 'text/plain');
+        final downloadUrl = html.Url.createObjectUrlFromBlob(blob);
+        final anchor = html.AnchorElement(href: downloadUrl)
+          ..setAttribute('download', fileName)
+          ..click();
+        html.Url.revokeObjectUrl(downloadUrl);
+      } else {
+        throw 'Falha ao enviar o arquivo consignado';
+      }
+    } catch (e) {
+      print('Erro ao enviar o arquivo consignado: $e');
+      throw 'Erro ao enviar o arquivo consignado: $e';
     }
   }
 }

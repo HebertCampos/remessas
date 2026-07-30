@@ -195,7 +195,8 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   const FooterComponet(page: 1),
-                  const Text('by Hebert Campos (DTI-ASFAL) - V 1.1.5', style: TextStyle(fontSize: 8, color: Colors.grey)),
+                  const Text('by Hebert Campos (DTI-ASFAL) - V 1.2.5', style: TextStyle(fontSize: 8, color: Colors.grey)),
+                  // adicionando consignado no sistema
                 ],
               ),
           ],
