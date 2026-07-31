@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:remessas/constants/api_constants.dart';
 import 'package:remessas/models/associados_model.dart';
+import 'package:remessas/services/api_response_utils.dart';
 import 'package:http/http.dart' as http;
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
@@ -155,11 +156,16 @@ class ApiServices {
     }
   }
 
-  Future<void> enviaArquivoBaixa(String texto) async {
+  Future<Map<String, dynamic>> enviaArquivoBaixa(String texto) async {
     final url = Uri.parse('$baseUrl/social/baixarecebimento?arquivo=$texto');
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
+        final decoded = json.decode(response.body);
+        if (decoded is Map<String, dynamic>) {
+          return decoded;
+        }
+        return {'success': response.body};
       } else {
         throw 'Falha ao modificar cobrança';
       }

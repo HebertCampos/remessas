@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:remessas/services/api_response_utils.dart';
 import 'dart:typed_data';
 import 'dart:convert';
 
@@ -14,21 +15,30 @@ Future<void> selectFile(BuildContext context) async {
     Uint8List fileBytes = result.files.single.bytes!;
     final content = utf8.decode(fileBytes);
 
-    // Envia o conteúdo do arquivo para o serviço
-    await ApiServices().enviaArquivoBaixa(content);
+    try {
+      final responseData = await ApiServices().enviaArquivoBaixa(content);
+      final message = buildApiSuccessMessage(responseData);
 
-    // Exibe uma mensagem de confirmação
-    // ignore: use_build_context_synchronously
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Arquivo enviado com sucesso!'),
-        duration: Duration(seconds: 2),
-      ),
-    );
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          duration: const Duration(seconds: 3),
+        ),
+      );
 
-    // Fecha o AlertDialog
-    // ignore: use_build_context_synchronously
-    Navigator.of(context).pop();
+      // ignore: use_build_context_synchronously
+      Navigator.of(context).pop();
+    } catch (e) {
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Erro ao enviar arquivo: $e'),
+          duration: const Duration(seconds: 3),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 }
 
